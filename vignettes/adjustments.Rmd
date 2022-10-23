@@ -1,0 +1,123 @@
+---
+title: "Making adjustments"
+author: "Anders H. Jarmund"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Get Started}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  out.width = "100%",
+  fig.asp = 0.7,
+  fig.width = 12,
+  fig.align = "center",
+  cache = FALSE,
+  external = FALSE
+)
+```
+
+# Introduction
+
+<script src="js/hideOutput.js"></script>
+  <style>
+  .showopt {
+    background-color: #004c93;
+      color: #FFFFFF;
+      width: 150px;
+    height: 20px;
+    text-align: center;
+    vertical-align: middle !important;
+    float: left;
+    font-family: sans-serif;
+    border-radius: 8px;
+  }
+
+.showopt:hover {
+  background-color: #dfe4f2;
+    color: #004c93;
+}
+
+.showopttext::before{
+  content: "Show/Hide Source"
+}
+
+pre.plot {
+  background-color: white !important;
+}
+</style>
+
+## Load data
+
+```{r setup}
+# library("inpreg")
+devtools::load_all("C:/Users/anderhja/Lokal_folder/inpreg2")
+obj <- inpreg()
+```
+
+## Find duplicates
+
+Based on study + id + time
+
+```{r}
+obj$set_batch(batch = NULL)
+df_dup <- obj$find_duplicates()
+obj$plot_duplicates(ref = "2", scales = "free")
+```
+
+## Adjusting batch effects
+
+```{r}
+obj$set_batch(batch = c("1", "2", "4"))
+obj$set_type(type = "X")
+g_pre <- obj$plot_pca()
+obj$adjust_batch_effect(types = "X", ref = "2")
+g_post <- obj$plot_pca()
+ggpubr::ggarrange(g_pre, g_post, labels = "AUTO")
+
+
+df <- obj$df_cmp(types = "X", wide = FALSE)[, .(value = median(value, na.rm = TRUE)), by = c("bp", "variable", "adjusted")]
+ggplot(df, aes(bp, value, color = adjusted)) + geom_point() + facet_wrap(~variable, scales = "free_y") + coord_flip() + obj$my_theme
+
+df <- obj$df_cmp(types = "X", wide = FALSE)[, .(value = median(value, na.rm = TRUE)), by = c("bp", "variable", "study", "adjusted")]
+ggplot(df, aes("study", value, color = adjusted)) + geom_point() + facet_wrap(~variable, scales = "free_y") + coord_flip() + obj$my_theme
+```
+
+## Adjusting plate effects
+
+```{r}
+obj$set_batch(batch = c("1","2"))
+obj$set_type(type = "X")
+g_pre <- obj$plot_pca(color = "plate")
+
+obj$set_batch(batch = c("2"))
+obj$adjust_plate_effect(types = "X", ref_study = "overtid", ref_time = 1)
+
+obj$set_batch(batch = c("1"))
+obj$adjust_plate_effect(types = "X", ref_study = "pregmet1", ref_time = 1)
+obj$adjust_plate_effect(types = "X", ref_study = "normalflow", ref_time = 1)
+
+obj$set_batch(batch = c("1","2"))
+g_post <- obj$plot_pca(color = "plate")
+ggpubr::ggarrange(g_pre, g_post, labels = "AUTO")
+
+
+df <- obj$df_cmp(types = "X", wide = FALSE)
+ggplot(df, aes(plate, value, color = adjusted)) + geom_point() + facet_wrap(~variable, scales = "free_y")
+
+df <- obj$c_o_v(df = obj$df_cmp(types = "X", wide = FALSE), by = c("batch", "study", "adjusted", "time"))
+ggplot(df, aes(paste(study, time), cov, color = adjusted)) + geom_point() + facet_wrap(~variable, scales = "free_y") + coord_flip() + obj$my_theme
+```
+
+## Getting cytokine concentrations
+
+```{r}
+# obj$set_batch(batch = c("2"))
+# obj$get_concentrations(ref = "2")
+# obj$plot_standards()
+```

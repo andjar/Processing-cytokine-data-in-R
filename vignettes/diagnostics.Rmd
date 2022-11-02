@@ -57,7 +57,7 @@ pre.plot {
 
 ```{r setup}
 # library("inpreg")
-devtools::load_all("C:/Users/anderhja/Lokal_folder/inpreg2")
+devtools::load_all("C:/Users/anderhja/Lokal_folder/Processing-cytokine-data-in-R/")
 obj <- inpreg()
 ```
 

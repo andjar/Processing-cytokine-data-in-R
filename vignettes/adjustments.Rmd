@@ -56,7 +56,7 @@ pre.plot {
 
 ```{r setup}
 # library("inpreg")
-devtools::load_all("C:/Users/anderhja/Lokal_folder/inpreg2")
+devtools::load_all("C:/Users/anderhja/Lokal_folder/Processing-cytokine-data-in-R/")
 obj <- inpreg()
 ```
 
@@ -90,14 +90,30 @@ ggplot(df, aes("study", value, color = adjusted)) + geom_point() + facet_wrap(~v
 
 ## Adjusting plate effects
 
+Plate effects are adjusted according to
+
+$$\log\hat{\text{FI}} = \log\text{FI} \cdot \gamma$$
+
+where $\gamma$ is an adjustment factor calculated by plate as the grand mean (across all plates) divided on the local mean (of the specific plate). The grand mean is calculated within one specific study at one specific time point.
+
+Also, to avoid impact from outliers, we modify our normalization function to remove the top and bottom 10%:
+
+```{r}
+obj$norm_function <- function(x) mean(x, na.rm = TRUE, trim = 0.1)
+```
+
+This is the "usual" way:
+
 ```{r}
 obj$set_batch(batch = c("1","2"))
 obj$set_type(type = "X")
 g_pre <- obj$plot_pca(color = "plate")
 
+# Adjust the samples in batch 2 using the grand mean of samples from the `overtid` cohort at time point 1
 obj$set_batch(batch = c("2"))
 obj$adjust_plate_effect(types = "X", ref_study = "overtid", ref_time = 1)
 
+# Adjust the samples in batch 1 using the grand mean of samples from either the `pregmet1` ot `normalflow` cohort at time point 1
 obj$set_batch(batch = c("1"))
 obj$adjust_plate_effect(types = "X", ref_study = "pregmet1", ref_time = 1)
 obj$adjust_plate_effect(types = "X", ref_study = "normalflow", ref_time = 1)
@@ -112,6 +128,76 @@ ggplot(df, aes(plate, value, color = adjusted)) + geom_point() + facet_wrap(~var
 
 df <- obj$c_o_v(df = obj$df_cmp(types = "X", wide = FALSE), by = c("batch", "study", "adjusted", "time"))
 ggplot(df, aes(paste(study, time), cov, color = adjusted)) + geom_point() + facet_wrap(~variable, scales = "free_y") + coord_flip() + obj$my_theme
+```
+
+### PregMet2 - a special case
+
+Sometimes, one discovers that the plate design has not been not optimal. The cohort `pregmet2` needs special treatment as most plates only contained samples from a specific time point - except three plates with properly randomized samples. We will therefore calculate a "grand mean" from these three plates.
+
+```{r}
+obj$set_batch(batch = c("4"))
+obj$set_type(type = "X")
+g_pre <- obj$plot_pca(color = "plate")
+adjustment_factors <- obj$get_plate_factor(ref_study = "pregmet2", ref_time = c(1,2,3,4,5), ref_plates = c(28, 29, 30))
+
+# Just to check:
+ifelse(obj$norm_function(obj$df(types = "X")[actualPlate %in% c(28, 29, 30) & time == 1, IL_1b]) == adjustment_factors[variable == "IL_1b" & time == 1 & plate == 1]$m.x,
+       "Success!",
+       "Failure...")
+
+ifelse(obj$norm_function(obj$df(types = "X")[actualPlate %in% c(28, 29, 30) & time == 3, IL_1b]) == adjustment_factors[variable == "IL_1b" & time == 3 & plate == 8]$m.x,
+       "Success!",
+       "Failure...")
+```
+
+We can now provide this data frame with adjustment factors directly by looping through time points (the adjustment function will only adjust plates that has such a factor):
+
+```{r}
+for (i in unique(adjustment_factors$time)) {
+  obj$adjust_plate_effect(df = adjustment_factors[time == i & !plate %in% c(28, 29, 30), ])
+}
+```
+
+To adjust the three final plates, we must select a specific time factor for each plate. We will use the time point that is most frequent on these plates:
+
+```{r}
+table(
+  obj$df(types = "X")[plate %in% c(28, 29, 30)][, .(actualPlate, time)]
+  )
+```
+
+So:
+
+* Plate 28: time point 1
+* Plate 29: time point 1
+* Plate 30: time point 4
+
+```{r}
+obj$adjust_plate_effect(df = adjustment_factors[time == 1 & plate %in% c(28, 29), ])
+obj$adjust_plate_effect(df = adjustment_factors[time == 4 & plate %in% c(30), ])
+
+g_post <- obj$plot_pca(color = "plate")
+ggpubr::ggarrange(g_pre, g_post, labels = "AUTO")
+
+df <- obj$df_cmp(types = "X", wide = FALSE)
+ggplot(df[time == 1,], aes(plate, value, color = adjusted)) + geom_boxplot() + facet_wrap(~variable, scales = "free_y")
+
+df <- obj$df_cmp(types = "C", wide = FALSE)
+ggplot(df, aes(plate, value, color = adjusted, shape = studyno)) + geom_point() + facet_wrap(~variable, scales = "free_y")
+```
+
+We can calculate COV for adjusted and unadjusted values:
+
+```{r}
+df_cov <- df[, .(COV = sd(value, na.rm = TRUE)/mean(value, na.rm = TRUE)), by = c("studyno", "variable", "adjusted")]
+ggplot(df_cov, aes(studyno, COV, group = adjusted, color = adjusted)) + geom_point() + geom_line() + facet_wrap(~variable, scales = "free_y") + theme_bw() + theme(legend.position = "bottom",axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+Or, alternatively, by first finding the mean per plate:
+
+```{r}
+df_cov <- df[, .(value_mean = mean(value, na.rm = TRUE)), by = c("variable", "plate", "studyno", "adjusted")][, .(COV = sd(value_mean, na.rm = TRUE)/mean(value_mean, na.rm = TRUE)), by = c("studyno", "variable", "adjusted")]
+ggplot(df_cov, aes(studyno, COV, group = adjusted, color = adjusted)) + geom_point() + geom_line() + facet_wrap(~variable, scales = "free_y") + theme_bw() + theme(legend.position = "bottom",axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
 
 ## Getting cytokine concentrations

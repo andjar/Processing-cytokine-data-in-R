@@ -15,6 +15,7 @@ InpregObject <- R6::R6Class("InpregObject",
         below_OOR = -1,
         above_OOR = -2,
 
+        norm_function = NULL,
 
         # Logging
         log_file = NULL,
@@ -82,6 +83,9 @@ InpregObject <- R6::R6Class("InpregObject",
 
           private$dfs0 <- copy(self$dfs)
           private$dfs_missing0 <- copy(self$dfs_missing)
+
+          # https://stackoverflow.com/questions/39914775/updating-method-definitions-in-r6-object-instance
+          self$norm_function <- function(x) mean(x, na.rm = TRUE)
 
           },
         df = function(FI = NULL, types = NULL, batches = NULL) {
@@ -301,10 +305,7 @@ InpregObject <- R6::R6Class("InpregObject",
             labs(x = paste("Batch", ref)) +
             self$my_theme
         },
-        norm_function = function(x) {
-          mean(x, na.rm = TRUE)
-        },
-        get_plate_factor = function(types = NULL, by = NULL, ref_study = NULL, ref_time = NULL) {
+        get_plate_factor = function(types = NULL, by = NULL, ref_study = NULL, ref_time = NULL, ref_plates = NULL) {
           if (is.null(by)) {
             if (is.null(ref_study)) {
               if (is.null(ref_time)) {
@@ -329,9 +330,19 @@ InpregObject <- R6::R6Class("InpregObject",
 
             if (is.null(ref_time)) {
 
-              df_ref <- self$wide_to_long(
-                self$df(types = ifelse(is.null(types), private$types, types))
-              )[, .(m = self$norm_function(value)), by = c("batch", "variable")]
+              if (is.null(ref_plates)) {
+
+                df_ref <- self$wide_to_long(
+                  self$df(types = ifelse(is.null(types), private$types, types))
+                )[, .(m = self$norm_function(value)), by = c("batch", "variable")]
+
+              } else {
+
+                df_ref <- self$wide_to_long(
+                  self$df(types = ifelse(is.null(types), private$types, types))
+                )[actualPlate %in% ref_plates, .(m = self$norm_function(value)), by = c("batch", "variable")]
+
+              }
 
               # x refers to grand mean, y to local mean
               df <- merge(df_ref, df, by = c("batch", "variable"))
@@ -339,11 +350,22 @@ InpregObject <- R6::R6Class("InpregObject",
 
             } else {
 
-              df_ref <- self$wide_to_long(
-                self$df(types = ifelse(is.null(types), private$types, types))
-              )[, .(m = self$norm_function(value)), by = c("batch", "time", "variable")]
-              df_ref <- df_ref[study == ref_time, ]
-              df <- df[study == ref_time, ]
+              if (is.null(ref_plates)) {
+
+                df_ref <- self$wide_to_long(
+                  self$df(types = ifelse(is.null(types), private$types, types))
+                )[, .(m = self$norm_function(value)), by = c("batch", "time", "variable")]
+
+              } else {
+
+                df_ref <- self$wide_to_long(
+                  self$df(types = ifelse(is.null(types), private$types, types))
+                )[actualPlate %in% ref_plates, .(m = self$norm_function(value)), by = c("batch", "time", "variable")]
+
+              }
+
+              df_ref <- df_ref[study %in% ref_time, ]
+              df <- df[study %in% ref_time, ]
 
               # x refers to grand mean, y to local mean
               df <- merge(df_ref, df, by = c("batch", "time", "variable"))
@@ -355,11 +377,23 @@ InpregObject <- R6::R6Class("InpregObject",
 
             if (is.null(ref_time)) {
 
-              df_ref <- self$wide_to_long(
-                self$df(types = ifelse(is.null(types), private$types, types))
-              )[, .(m = self$norm_function(value)), by = c("batch", "study", "variable")]
-              df_ref <- df_ref[study == ref_study, ]
-              df <- df[study == ref_study, ]
+              if (is.null(ref_plates)) {
+
+                df_ref <- self$wide_to_long(
+                  self$df(types = ifelse(is.null(types), private$types, types))
+                )[, .(m = self$norm_function(value)), by = c("batch", "study", "variable")]
+                df_ref <- df_ref[study == ref_study, ]
+                df <- df[study == ref_study, ]
+
+              } else {
+
+                df_ref <- self$wide_to_long(
+                  self$df(types = ifelse(is.null(types), private$types, types))
+                )[actualPlate %in% ref_plates, .(m = self$norm_function(value)), by = c("batch", "study", "variable")]
+                df_ref <- df_ref[study == ref_study, ]
+                df <- df[study == ref_study, ]
+
+              }
 
               # x refers to grand mean, y to local mean
               df <- merge(df_ref, df, by = c("batch", "study", "variable"))
@@ -367,11 +401,25 @@ InpregObject <- R6::R6Class("InpregObject",
 
             } else {
 
-              df_ref <- self$wide_to_long(
-                self$df(types = ifelse(is.null(types), private$types, types))
-              )[, .(m = self$norm_function(value)), by = c("batch", "time", "study", "variable")]
-              df_ref <- df_ref[study == ref_study & time == ref_time, ]
-              df <- df[study == ref_study & time == ref_time, ]
+
+
+              if (is.null(ref_plates)) {
+
+                df_ref <- self$wide_to_long(
+                  self$df(types = ifelse(is.null(types), private$types, types))
+                )[, .(m = self$norm_function(value)), by = c("batch", "time", "study", "variable")]
+                df_ref <- df_ref[study == ref_study & time %in% ref_time, ]
+                df <- df[study == ref_study & time %in% ref_time, ]
+
+              } else {
+
+                df_ref <- self$wide_to_long(
+                  self$df(types = ifelse(is.null(types), private$types, types))
+                )[actualPlate %in% ref_plates, .(m = self$norm_function(value)), by = c("batch", "time", "study", "variable")]
+                df_ref <- df_ref[study == ref_study & time %in% ref_time, ]
+                df <- df[study == ref_study & time %in% ref_time, ]
+
+              }
 
               # x refers to grand mean, y to local mean
               df <- merge(df_ref, df, by = c("batch", "time", "study", "variable"))
@@ -384,9 +432,11 @@ InpregObject <- R6::R6Class("InpregObject",
 
           return(df)
         },
-        adjust_plate_effect = function(types = NULL, ref_study = NULL, ref_time = NULL) {
+        adjust_plate_effect = function(df = NULL, types = NULL, ref_study = NULL, ref_time = NULL) {
           self$log("Adjusting both FI and biorad values")
-          df <- self$get_plate_factor(types = types, ref_study = ref_study, ref_time = ref_time)
+          if (is.null(df)) {
+            df <- self$get_plate_factor(types = types, ref_study = ref_study, ref_time = ref_time)
+          }
           for (b in unique(df$batch)) {
             for (p in unique(df$plate[df$batch == b])) {
               for (v in self$cytokines) {
@@ -403,7 +453,28 @@ InpregObject <- R6::R6Class("InpregObject",
               }
             }
           }
+        },
+        adjust_plate_effect_by_time = function(df = NULL) {
+          self$log("Adjusting both FI and biorad values")
 
+          for (b in unique(df$batch)) {
+            for (p in unique(df$plate[df$batch == b])) {
+              for (t in unique(df$time[df$batch == b & df$plate == p])) {
+                for (v in self$cytokines) {
+                  set(self$dfs[["FI"]],
+                      i = self$dfs[["FI"]][batch == b & plate == p & time == t, which = TRUE],
+                      j = v,
+                      value = self$dfs[["FI"]][batch == b & plate == p & time == t, get(v)] * df[batch == b & plate == p & time == t & variable == v, f]
+                  )
+                  set(self$dfs[["biorad"]],
+                      i = self$dfs[["biorad"]][batch == b & plate == p & time == t, which = TRUE],
+                      j = v,
+                      value = self$dfs[["biorad"]][batch == b & plate == p & time == t, get(v)] * df[batch == b & plate == p & time == t & variable == v, f]
+                  )
+                }
+              }
+            }
+          }
         },
         adjust_batch_effect = function(ref = "2", types = "X") {
 

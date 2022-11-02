@@ -59,7 +59,7 @@ The idea with this package is to simplify the normalization and pre-processing o
 ```{r setup}
 # library("inpreg")
 # devtools::install_version("nCal", version = "2021.9-12", repos = "http://cran.us.r-project.org")
-devtools::load_all("C:/Users/anderhja/Lokal_folder/inpreg2")
+devtools::load_all("C:/Users/anderhja/Lokal_folder/Processing-cytokine-data-in-R/")
 obj <- inpreg(
   filenames = list(
                        FI = "C:/Users/anderhja/Lokal_folder/git/fluorescens_alle.csv",

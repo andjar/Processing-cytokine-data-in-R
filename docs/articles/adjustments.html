@@ -78,7 +78,7 @@
                         <h4 data-toc-skip class="author">Anders H.
 Jarmund</h4>
             
-            <h4 data-toc-skip class="date">2022-09-26</h4>
+            <h4 data-toc-skip class="date">2022-11-02</h4>
       
       
       <div class="hidden name"><code>adjustments.Rmd</code></div>
@@ -120,108 +120,214 @@ pre.plot {
 <h3 id="load-data">Load data<a class="anchor" aria-label="anchor" href="#load-data"></a>
 </h3>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># library("inpreg")</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/load_all.html" class="external-link">load_all</a></span><span class="op">(</span><span class="st">"C:/Users/anderhja/Lokal_folder/inpreg2"</span><span class="op">)</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">i</span> Loading <span style="color: #0000BB;">inpreg</span></span>
-<span class="co">#&gt; Loading required package: data.table</span>
-<span class="co">#&gt; Warning: package 'data.table' was built under R version 4.0.5</span>
-<span class="co">#&gt; Loading required package: ggplot2</span>
-<span class="va">obj</span> <span class="op">&lt;-</span> <span class="fu">inpreg</span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; INFO  [2022-09-26 16:55:13] Files imported</span>
-<span class="co">#&gt; INFO  [2022-09-26 16:55:14] Using FI</span>
-<span class="co">#&gt; INFO  [2022-09-26 16:55:14] Using log_e-values</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># library("inpreg")</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/load_all.html" class="external-link">load_all</a></span><span class="op">(</span><span class="st">"C:/Users/anderhja/Lokal_folder/Processing-cytokine-data-in-R/"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in Sys.setlocale("LC_CTYPE", ctype): OS reports request to set locale to</span></span>
+<span><span class="co">#&gt; "Norwegian Bokmål_Norway.utf8" cannot be honored</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">i</span> Loading <span style="color: #0000BB;">inpreg</span></span></span>
+<span><span class="co">#&gt; Loading required package: data.table</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Loading required package: ggplot2</span></span>
+<span><span class="va">obj</span> <span class="op">&lt;-</span> <span class="fu">inpreg</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; INFO  [2022-11-02 21:21:31] Files imported</span></span>
+<span><span class="co">#&gt; INFO  [2022-11-02 21:21:32] Using FI</span></span>
+<span><span class="co">#&gt; INFO  [2022-11-02 21:21:32] Using log_e-values</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="find-duplicates">Find duplicates<a class="anchor" aria-label="anchor" href="#find-duplicates"></a>
 </h3>
 <p>Based on study + id + time</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">obj</span><span class="op">$</span><span class="fu">set_batch</span><span class="op">(</span>batch <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
-<span class="co">#&gt; WARN  [2022-09-26 16:55:14] Only using samples from batch(es)</span>
-<span class="va">df_dup</span> <span class="op">&lt;-</span> <span class="va">obj</span><span class="op">$</span><span class="fu">find_duplicates</span><span class="op">(</span><span class="op">)</span>
-<span class="va">obj</span><span class="op">$</span><span class="fu">plot_duplicates</span><span class="op">(</span>ref <span class="op">=</span> <span class="st">"2"</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span>
-<span class="co">#&gt; `geom_smooth()` using formula 'y ~ x'</span>
-<span class="co">#&gt; Warning: Removed 4 rows containing non-finite values (stat_smooth).</span>
-<span class="co">#&gt; Warning: Removed 4 rows containing missing values (geom_point).</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">obj</span><span class="op">$</span><span class="fu">set_batch</span><span class="op">(</span>batch <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span><span class="co">#&gt; WARN  [2022-11-02 21:21:32] Only using samples from batch(es)</span></span>
+<span><span class="va">df_dup</span> <span class="op">&lt;-</span> <span class="va">obj</span><span class="op">$</span><span class="fu">find_duplicates</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">obj</span><span class="op">$</span><span class="fu">plot_duplicates</span><span class="op">(</span>ref <span class="op">=</span> <span class="st">"2"</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; `geom_smooth()` using formula 'y ~ x'</span></span>
+<span><span class="co">#&gt; Warning: Removed 4 rows containing non-finite values (stat_smooth).</span></span>
+<span><span class="co">#&gt; Warning: Removed 4 rows containing missing values (geom_point).</span></span></code></pre></div>
 <p><img src="adjustments_files/figure-html/unnamed-chunk-2-1.png" width="100%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="adjusting-batch-effects">Adjusting batch effects<a class="anchor" aria-label="anchor" href="#adjusting-batch-effects"></a>
 </h3>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">obj</span><span class="op">$</span><span class="fu">set_batch</span><span class="op">(</span>batch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1"</span>, <span class="st">"2"</span>, <span class="st">"4"</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; WARN  [2022-09-26 16:55:20] Only using samples from batch(es) 1Only using samples from batch(es) 2Only using samples from batch(es) 4</span>
-<span class="va">obj</span><span class="op">$</span><span class="fu">set_type</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"X"</span><span class="op">)</span>
-<span class="co">#&gt; WARN  [2022-09-26 16:55:20] Only using samples of type X</span>
-<span class="va">g_pre</span> <span class="op">&lt;-</span> <span class="va">obj</span><span class="op">$</span><span class="fu">plot_pca</span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; WARN  [2022-09-26 16:55:20] Removed -1012 rows due to missing values</span>
-<span class="va">obj</span><span class="op">$</span><span class="fu">adjust_batch_effect</span><span class="op">(</span>types <span class="op">=</span> <span class="st">"X"</span>, ref <span class="op">=</span> <span class="st">"2"</span><span class="op">)</span>
-<span class="co">#&gt; INFO  [2022-09-26 16:55:20] Adjusting both FI and biorad values</span>
-<span class="va">g_post</span> <span class="op">&lt;-</span> <span class="va">obj</span><span class="op">$</span><span class="fu">plot_pca</span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; WARN  [2022-09-26 16:55:21] Removed -1012 rows due to missing values</span>
-<span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html" class="external-link">ggarrange</a></span><span class="op">(</span><span class="va">g_pre</span>, <span class="va">g_post</span>, labels <span class="op">=</span> <span class="st">"AUTO"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">obj</span><span class="op">$</span><span class="fu">set_batch</span><span class="op">(</span>batch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1"</span>, <span class="st">"2"</span>, <span class="st">"4"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; WARN  [2022-11-02 21:21:37] Only using samples from batch(es) 1Only using samples from batch(es) 2Only using samples from batch(es) 4</span></span>
+<span><span class="va">obj</span><span class="op">$</span><span class="fu">set_type</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"X"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; WARN  [2022-11-02 21:21:37] Only using samples of type X</span></span>
+<span><span class="va">g_pre</span> <span class="op">&lt;-</span> <span class="va">obj</span><span class="op">$</span><span class="fu">plot_pca</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; WARN  [2022-11-02 21:21:37] Removed -1012 rows due to missing values</span></span>
+<span><span class="va">obj</span><span class="op">$</span><span class="fu">adjust_batch_effect</span><span class="op">(</span>types <span class="op">=</span> <span class="st">"X"</span>, ref <span class="op">=</span> <span class="st">"2"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; INFO  [2022-11-02 21:21:37] Adjusting both FI and biorad values</span></span>
+<span><span class="va">g_post</span> <span class="op">&lt;-</span> <span class="va">obj</span><span class="op">$</span><span class="fu">plot_pca</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; WARN  [2022-11-02 21:21:38] Removed -1012 rows due to missing values</span></span>
+<span><span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html" class="external-link">ggarrange</a></span><span class="op">(</span><span class="va">g_pre</span>, <span class="va">g_post</span>, labels <span class="op">=</span> <span class="st">"AUTO"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="adjustments_files/figure-html/unnamed-chunk-3-1.png" width="100%" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="va">df</span> <span class="op">&lt;-</span> <span class="va">obj</span><span class="op">$</span><span class="fu">df_cmp</span><span class="op">(</span>types <span class="op">=</span> <span class="st">"X"</span>, wide <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">value</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bp"</span>, <span class="st">"variable"</span>, <span class="st">"adjusted"</span><span class="op">)</span><span class="op">]</span>
-<span class="fu">ggplot</span><span class="op">(</span><span class="va">df</span>, <span class="fu">aes</span><span class="op">(</span><span class="va">bp</span>, <span class="va">value</span>, color <span class="op">=</span> <span class="va">adjusted</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">variable</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span> <span class="op">+</span> <span class="fu">coord_flip</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="va">obj</span><span class="op">$</span><span class="va">my_theme</span>
-<span class="co">#&gt; Warning: Removed 28 rows containing missing values (geom_point).</span></code></pre></div>
+<code class="sourceCode R"><span></span>
+<span></span>
+<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">obj</span><span class="op">$</span><span class="fu">df_cmp</span><span class="op">(</span>types <span class="op">=</span> <span class="st">"X"</span>, wide <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">value</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bp"</span>, <span class="st">"variable"</span>, <span class="st">"adjusted"</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">df</span>, <span class="fu">aes</span><span class="op">(</span><span class="va">bp</span>, <span class="va">value</span>, color <span class="op">=</span> <span class="va">adjusted</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">variable</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span> <span class="op">+</span> <span class="fu">coord_flip</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="va">obj</span><span class="op">$</span><span class="va">my_theme</span></span>
+<span><span class="co">#&gt; Warning: Removed 28 rows containing missing values (geom_point).</span></span></code></pre></div>
 <p><img src="adjustments_files/figure-html/unnamed-chunk-3-2.png" width="100%" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="va">df</span> <span class="op">&lt;-</span> <span class="va">obj</span><span class="op">$</span><span class="fu">df_cmp</span><span class="op">(</span>types <span class="op">=</span> <span class="st">"X"</span>, wide <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">value</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bp"</span>, <span class="st">"variable"</span>, <span class="st">"study"</span>, <span class="st">"adjusted"</span><span class="op">)</span><span class="op">]</span>
-<span class="fu">ggplot</span><span class="op">(</span><span class="va">df</span>, <span class="fu">aes</span><span class="op">(</span><span class="st">"study"</span>, <span class="va">value</span>, color <span class="op">=</span> <span class="va">adjusted</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">variable</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span> <span class="op">+</span> <span class="fu">coord_flip</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="va">obj</span><span class="op">$</span><span class="va">my_theme</span>
-<span class="co">#&gt; Warning: Removed 28 rows containing missing values (geom_point).</span></code></pre></div>
+<code class="sourceCode R"><span></span>
+<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">obj</span><span class="op">$</span><span class="fu">df_cmp</span><span class="op">(</span>types <span class="op">=</span> <span class="st">"X"</span>, wide <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">value</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bp"</span>, <span class="st">"variable"</span>, <span class="st">"study"</span>, <span class="st">"adjusted"</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">df</span>, <span class="fu">aes</span><span class="op">(</span><span class="st">"study"</span>, <span class="va">value</span>, color <span class="op">=</span> <span class="va">adjusted</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">variable</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span> <span class="op">+</span> <span class="fu">coord_flip</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="va">obj</span><span class="op">$</span><span class="va">my_theme</span></span>
+<span><span class="co">#&gt; Warning: Removed 28 rows containing missing values (geom_point).</span></span></code></pre></div>
 <p><img src="adjustments_files/figure-html/unnamed-chunk-3-3.png" width="100%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="adjusting-plate-effects">Adjusting plate effects<a class="anchor" aria-label="anchor" href="#adjusting-plate-effects"></a>
 </h3>
+<p>Plate effects are adjusted according to</p>
+<p><span class="math display">\[\log\hat{\text{FI}} = \log\text{FI}
+\cdot \gamma\]</span></p>
+<p>where <span class="math inline">\(\gamma\)</span> is an adjustment
+factor calculated by plate as the grand mean (across all plates) divided
+on the local mean (of the specific plate). The grand mean is calculated
+within one specific study at one specific time point.</p>
+<p>Also, to avoid impact from outliers, we modify our normalization
+function to remove the top and bottom 10%:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">obj</span><span class="op">$</span><span class="fu">set_batch</span><span class="op">(</span>batch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1"</span>,<span class="st">"2"</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; WARN  [2022-09-26 16:55:30] Only using samples from batch(es) 1Only using samples from batch(es) 2</span>
-<span class="va">obj</span><span class="op">$</span><span class="fu">set_type</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"X"</span><span class="op">)</span>
-<span class="co">#&gt; WARN  [2022-09-26 16:55:30] Only using samples of type X</span>
-<span class="va">g_pre</span> <span class="op">&lt;-</span> <span class="va">obj</span><span class="op">$</span><span class="fu">plot_pca</span><span class="op">(</span>color <span class="op">=</span> <span class="st">"plate"</span><span class="op">)</span>
-
-<span class="va">obj</span><span class="op">$</span><span class="fu">set_batch</span><span class="op">(</span>batch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2"</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; WARN  [2022-09-26 16:55:31] Only using samples from batch(es) 2</span>
-<span class="va">obj</span><span class="op">$</span><span class="fu">adjust_plate_effect</span><span class="op">(</span>types <span class="op">=</span> <span class="st">"X"</span>, ref_study <span class="op">=</span> <span class="st">"overtid"</span>, ref_time <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
-<span class="co">#&gt; INFO  [2022-09-26 16:55:31] Adjusting both FI and biorad values</span>
-
-<span class="va">obj</span><span class="op">$</span><span class="fu">set_batch</span><span class="op">(</span>batch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1"</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; WARN  [2022-09-26 16:55:33] Only using samples from batch(es) 1</span>
-<span class="va">obj</span><span class="op">$</span><span class="fu">adjust_plate_effect</span><span class="op">(</span>types <span class="op">=</span> <span class="st">"X"</span>, ref_study <span class="op">=</span> <span class="st">"pregmet1"</span>, ref_time <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
-<span class="co">#&gt; INFO  [2022-09-26 16:55:33] Adjusting both FI and biorad values</span>
-<span class="va">obj</span><span class="op">$</span><span class="fu">adjust_plate_effect</span><span class="op">(</span>types <span class="op">=</span> <span class="st">"X"</span>, ref_study <span class="op">=</span> <span class="st">"normalflow"</span>, ref_time <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
-<span class="co">#&gt; INFO  [2022-09-26 16:55:35] Adjusting both FI and biorad values</span>
-
-<span class="va">obj</span><span class="op">$</span><span class="fu">set_batch</span><span class="op">(</span>batch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1"</span>,<span class="st">"2"</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; WARN  [2022-09-26 16:55:36] Only using samples from batch(es) 1Only using samples from batch(es) 2</span>
-<span class="va">g_post</span> <span class="op">&lt;-</span> <span class="va">obj</span><span class="op">$</span><span class="fu">plot_pca</span><span class="op">(</span>color <span class="op">=</span> <span class="st">"plate"</span><span class="op">)</span>
-<span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html" class="external-link">ggarrange</a></span><span class="op">(</span><span class="va">g_pre</span>, <span class="va">g_post</span>, labels <span class="op">=</span> <span class="st">"AUTO"</span><span class="op">)</span></code></pre></div>
-<p><img src="adjustments_files/figure-html/unnamed-chunk-4-1.png" width="100%" style="display: block; margin: auto;"></p>
+<code class="sourceCode R"><span><span class="va">obj</span><span class="op">$</span><span class="va">norm_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span>, trim <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span></code></pre></div>
+<p>This is the “usual” way:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="va">df</span> <span class="op">&lt;-</span> <span class="va">obj</span><span class="op">$</span><span class="fu">df_cmp</span><span class="op">(</span>types <span class="op">=</span> <span class="st">"X"</span>, wide <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-<span class="fu">ggplot</span><span class="op">(</span><span class="va">df</span>, <span class="fu">aes</span><span class="op">(</span><span class="va">plate</span>, <span class="va">value</span>, color <span class="op">=</span> <span class="va">adjusted</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">variable</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span></code></pre></div>
-<p><img src="adjustments_files/figure-html/unnamed-chunk-4-2.png" width="100%" style="display: block; margin: auto;"></p>
+<code class="sourceCode R"><span><span class="va">obj</span><span class="op">$</span><span class="fu">set_batch</span><span class="op">(</span>batch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1"</span>,<span class="st">"2"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; WARN  [2022-11-02 21:21:47] Only using samples from batch(es) 1Only using samples from batch(es) 2</span></span>
+<span><span class="va">obj</span><span class="op">$</span><span class="fu">set_type</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"X"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; WARN  [2022-11-02 21:21:47] Only using samples of type X</span></span>
+<span><span class="va">g_pre</span> <span class="op">&lt;-</span> <span class="va">obj</span><span class="op">$</span><span class="fu">plot_pca</span><span class="op">(</span>color <span class="op">=</span> <span class="st">"plate"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Adjust the samples in batch 2 using the grand mean of samples from the `overtid` cohort at time point 1</span></span>
+<span><span class="va">obj</span><span class="op">$</span><span class="fu">set_batch</span><span class="op">(</span>batch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; WARN  [2022-11-02 21:21:47] Only using samples from batch(es) 2</span></span>
+<span><span class="va">obj</span><span class="op">$</span><span class="fu">adjust_plate_effect</span><span class="op">(</span>types <span class="op">=</span> <span class="st">"X"</span>, ref_study <span class="op">=</span> <span class="st">"overtid"</span>, ref_time <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="co">#&gt; INFO  [2022-11-02 21:21:47] Adjusting both FI and biorad values</span></span>
+<span></span>
+<span><span class="co"># Adjust the samples in batch 1 using the grand mean of samples from either the `pregmet1` ot `normalflow` cohort at time point 1</span></span>
+<span><span class="va">obj</span><span class="op">$</span><span class="fu">set_batch</span><span class="op">(</span>batch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; WARN  [2022-11-02 21:21:49] Only using samples from batch(es) 1</span></span>
+<span><span class="va">obj</span><span class="op">$</span><span class="fu">adjust_plate_effect</span><span class="op">(</span>types <span class="op">=</span> <span class="st">"X"</span>, ref_study <span class="op">=</span> <span class="st">"pregmet1"</span>, ref_time <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="co">#&gt; INFO  [2022-11-02 21:21:49] Adjusting both FI and biorad values</span></span>
+<span><span class="va">obj</span><span class="op">$</span><span class="fu">adjust_plate_effect</span><span class="op">(</span>types <span class="op">=</span> <span class="st">"X"</span>, ref_study <span class="op">=</span> <span class="st">"normalflow"</span>, ref_time <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="co">#&gt; INFO  [2022-11-02 21:21:50] Adjusting both FI and biorad values</span></span>
+<span></span>
+<span><span class="va">obj</span><span class="op">$</span><span class="fu">set_batch</span><span class="op">(</span>batch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1"</span>,<span class="st">"2"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; WARN  [2022-11-02 21:21:51] Only using samples from batch(es) 1Only using samples from batch(es) 2</span></span>
+<span><span class="va">g_post</span> <span class="op">&lt;-</span> <span class="va">obj</span><span class="op">$</span><span class="fu">plot_pca</span><span class="op">(</span>color <span class="op">=</span> <span class="st">"plate"</span><span class="op">)</span></span>
+<span><span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html" class="external-link">ggarrange</a></span><span class="op">(</span><span class="va">g_pre</span>, <span class="va">g_post</span>, labels <span class="op">=</span> <span class="st">"AUTO"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="adjustments_files/figure-html/unnamed-chunk-5-1.png" width="100%" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="va">df</span> <span class="op">&lt;-</span> <span class="va">obj</span><span class="op">$</span><span class="fu">c_o_v</span><span class="op">(</span>df <span class="op">=</span> <span class="va">obj</span><span class="op">$</span><span class="fu">df_cmp</span><span class="op">(</span>types <span class="op">=</span> <span class="st">"X"</span>, wide <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"batch"</span>, <span class="st">"study"</span>, <span class="st">"adjusted"</span>, <span class="st">"time"</span><span class="op">)</span><span class="op">)</span>
-<span class="fu">ggplot</span><span class="op">(</span><span class="va">df</span>, <span class="fu">aes</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">study</span>, <span class="va">time</span><span class="op">)</span>, <span class="va">cov</span>, color <span class="op">=</span> <span class="va">adjusted</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">variable</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span> <span class="op">+</span> <span class="fu">coord_flip</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="va">obj</span><span class="op">$</span><span class="va">my_theme</span>
-<span class="co">#&gt; Warning: Removed 108 rows containing missing values (geom_point).</span></code></pre></div>
-<p><img src="adjustments_files/figure-html/unnamed-chunk-4-3.png" width="100%" style="display: block; margin: auto;"></p>
+<code class="sourceCode R"><span></span>
+<span></span>
+<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">obj</span><span class="op">$</span><span class="fu">df_cmp</span><span class="op">(</span>types <span class="op">=</span> <span class="st">"X"</span>, wide <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">df</span>, <span class="fu">aes</span><span class="op">(</span><span class="va">plate</span>, <span class="va">value</span>, color <span class="op">=</span> <span class="va">adjusted</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">variable</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="adjustments_files/figure-html/unnamed-chunk-5-2.png" width="100%" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">obj</span><span class="op">$</span><span class="fu">c_o_v</span><span class="op">(</span>df <span class="op">=</span> <span class="va">obj</span><span class="op">$</span><span class="fu">df_cmp</span><span class="op">(</span>types <span class="op">=</span> <span class="st">"X"</span>, wide <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"batch"</span>, <span class="st">"study"</span>, <span class="st">"adjusted"</span>, <span class="st">"time"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">df</span>, <span class="fu">aes</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">study</span>, <span class="va">time</span><span class="op">)</span>, <span class="va">cov</span>, color <span class="op">=</span> <span class="va">adjusted</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">variable</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span> <span class="op">+</span> <span class="fu">coord_flip</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="va">obj</span><span class="op">$</span><span class="va">my_theme</span></span>
+<span><span class="co">#&gt; Warning: Removed 108 rows containing missing values (geom_point).</span></span></code></pre></div>
+<p><img src="adjustments_files/figure-html/unnamed-chunk-5-3.png" width="100%" style="display: block; margin: auto;"></p>
+<div class="section level4">
+<h4 id="pregmet2---a-special-case">PregMet2 - a special case<a class="anchor" aria-label="anchor" href="#pregmet2---a-special-case"></a>
+</h4>
+<p>Sometimes, one discovers that the plate design has not been not
+optimal. The cohort <code>pregmet2</code> needs special treatment as
+most plates only contained samples from a specific time point - except
+three plates with properly randomized samples. We will therefore
+calculate a “grand mean” from these three plates.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">obj</span><span class="op">$</span><span class="fu">set_batch</span><span class="op">(</span>batch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"4"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; WARN  [2022-11-02 21:22:11] Only using samples from batch(es) 4</span></span>
+<span><span class="va">obj</span><span class="op">$</span><span class="fu">set_type</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"X"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; WARN  [2022-11-02 21:22:11] Only using samples of type X</span></span>
+<span><span class="va">g_pre</span> <span class="op">&lt;-</span> <span class="va">obj</span><span class="op">$</span><span class="fu">plot_pca</span><span class="op">(</span>color <span class="op">=</span> <span class="st">"plate"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; WARN  [2022-11-02 21:22:11] Removed -1012 rows due to missing values</span></span>
+<span><span class="va">adjustment_factors</span> <span class="op">&lt;-</span> <span class="va">obj</span><span class="op">$</span><span class="fu">get_plate_factor</span><span class="op">(</span>ref_study <span class="op">=</span> <span class="st">"pregmet2"</span>, ref_time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span><span class="op">)</span>, ref_plates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">28</span>, <span class="fl">29</span>, <span class="fl">30</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Just to check:</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">obj</span><span class="op">$</span><span class="fu">norm_function</span><span class="op">(</span><span class="va">obj</span><span class="op">$</span><span class="fu">df</span><span class="op">(</span>types <span class="op">=</span> <span class="st">"X"</span><span class="op">)</span><span class="op">[</span><span class="va">actualPlate</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">28</span>, <span class="fl">29</span>, <span class="fl">30</span><span class="op">)</span> <span class="op">&amp;</span> <span class="va">time</span> <span class="op">==</span> <span class="fl">1</span>, <span class="va">IL_1b</span><span class="op">]</span><span class="op">)</span> <span class="op">==</span> <span class="va">adjustment_factors</span><span class="op">[</span><span class="va">variable</span> <span class="op">==</span> <span class="st">"IL_1b"</span> <span class="op">&amp;</span> <span class="va">time</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">&amp;</span> <span class="va">plate</span> <span class="op">==</span> <span class="fl">1</span><span class="op">]</span><span class="op">$</span><span class="va">m.x</span>,</span>
+<span>       <span class="st">"Success!"</span>,</span>
+<span>       <span class="st">"Failure..."</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "Success!"</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">obj</span><span class="op">$</span><span class="fu">norm_function</span><span class="op">(</span><span class="va">obj</span><span class="op">$</span><span class="fu">df</span><span class="op">(</span>types <span class="op">=</span> <span class="st">"X"</span><span class="op">)</span><span class="op">[</span><span class="va">actualPlate</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">28</span>, <span class="fl">29</span>, <span class="fl">30</span><span class="op">)</span> <span class="op">&amp;</span> <span class="va">time</span> <span class="op">==</span> <span class="fl">3</span>, <span class="va">IL_1b</span><span class="op">]</span><span class="op">)</span> <span class="op">==</span> <span class="va">adjustment_factors</span><span class="op">[</span><span class="va">variable</span> <span class="op">==</span> <span class="st">"IL_1b"</span> <span class="op">&amp;</span> <span class="va">time</span> <span class="op">==</span> <span class="fl">3</span> <span class="op">&amp;</span> <span class="va">plate</span> <span class="op">==</span> <span class="fl">8</span><span class="op">]</span><span class="op">$</span><span class="va">m.x</span>,</span>
+<span>       <span class="st">"Success!"</span>,</span>
+<span>       <span class="st">"Failure..."</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "Success!"</span></span></code></pre></div>
+<p>We can now provide this data frame with adjustment factors directly
+by looping through time points (the adjustment function will only adjust
+plates that has such a factor):</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">adjustment_factors</span><span class="op">$</span><span class="va">time</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">obj</span><span class="op">$</span><span class="fu">adjust_plate_effect</span><span class="op">(</span>df <span class="op">=</span> <span class="va">adjustment_factors</span><span class="op">[</span><span class="va">time</span> <span class="op">==</span> <span class="va">i</span> <span class="op">&amp;</span> <span class="op">!</span><span class="va">plate</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">28</span>, <span class="fl">29</span>, <span class="fl">30</span><span class="op">)</span>, <span class="op">]</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span><span class="co">#&gt; INFO  [2022-11-02 21:22:11] Adjusting both FI and biorad values</span></span>
+<span><span class="co">#&gt; INFO  [2022-11-02 21:22:12] Adjusting both FI and biorad values</span></span>
+<span><span class="co">#&gt; INFO  [2022-11-02 21:22:12] Adjusting both FI and biorad values</span></span>
+<span><span class="co">#&gt; INFO  [2022-11-02 21:22:13] Adjusting both FI and biorad values</span></span>
+<span><span class="co">#&gt; INFO  [2022-11-02 21:22:14] Adjusting both FI and biorad values</span></span></code></pre></div>
+<p>To adjust the three final plates, we must select a specific time
+factor for each plate. We will use the time point that is most frequent
+on these plates:</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span></span>
+<span>  <span class="va">obj</span><span class="op">$</span><span class="fu">df</span><span class="op">(</span>types <span class="op">=</span> <span class="st">"X"</span><span class="op">)</span><span class="op">[</span><span class="va">plate</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">28</span>, <span class="fl">29</span>, <span class="fl">30</span><span class="op">)</span><span class="op">]</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span><span class="va">actualPlate</span>, <span class="va">time</span><span class="op">)</span><span class="op">]</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="co">#&gt;            time</span></span>
+<span><span class="co">#&gt; actualPlate  1  2  3  4  5</span></span>
+<span><span class="co">#&gt;          28 16 16 13 15 13</span></span>
+<span><span class="co">#&gt;          29 13 12  9  6 12</span></span>
+<span><span class="co">#&gt;          30 11 11  9 14 12</span></span></code></pre></div>
+<p>So:</p>
+<ul>
+<li>Plate 28: time point 1</li>
+<li>Plate 29: time point 1</li>
+<li>Plate 30: time point 4</li>
+</ul>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">obj</span><span class="op">$</span><span class="fu">adjust_plate_effect</span><span class="op">(</span>df <span class="op">=</span> <span class="va">adjustment_factors</span><span class="op">[</span><span class="va">time</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">&amp;</span> <span class="va">plate</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">28</span>, <span class="fl">29</span><span class="op">)</span>, <span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt; INFO  [2022-11-02 21:22:14] Adjusting both FI and biorad values</span></span>
+<span><span class="va">obj</span><span class="op">$</span><span class="fu">adjust_plate_effect</span><span class="op">(</span>df <span class="op">=</span> <span class="va">adjustment_factors</span><span class="op">[</span><span class="va">time</span> <span class="op">==</span> <span class="fl">4</span> <span class="op">&amp;</span> <span class="va">plate</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">30</span><span class="op">)</span>, <span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt; INFO  [2022-11-02 21:22:15] Adjusting both FI and biorad values</span></span>
+<span></span>
+<span><span class="va">g_post</span> <span class="op">&lt;-</span> <span class="va">obj</span><span class="op">$</span><span class="fu">plot_pca</span><span class="op">(</span>color <span class="op">=</span> <span class="st">"plate"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; WARN  [2022-11-02 21:22:15] Removed -1012 rows due to missing values</span></span>
+<span><span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html" class="external-link">ggarrange</a></span><span class="op">(</span><span class="va">g_pre</span>, <span class="va">g_post</span>, labels <span class="op">=</span> <span class="st">"AUTO"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="adjustments_files/figure-html/unnamed-chunk-9-1.png" width="100%" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">obj</span><span class="op">$</span><span class="fu">df_cmp</span><span class="op">(</span>types <span class="op">=</span> <span class="st">"X"</span>, wide <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">df</span><span class="op">[</span><span class="va">time</span> <span class="op">==</span> <span class="fl">1</span>,<span class="op">]</span>, <span class="fu">aes</span><span class="op">(</span><span class="va">plate</span>, <span class="va">value</span>, color <span class="op">=</span> <span class="va">adjusted</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_boxplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">variable</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: Removed 460 rows containing non-finite values (stat_boxplot).</span></span></code></pre></div>
+<p><img src="adjustments_files/figure-html/unnamed-chunk-9-2.png" width="100%" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">obj</span><span class="op">$</span><span class="fu">df_cmp</span><span class="op">(</span>types <span class="op">=</span> <span class="st">"C"</span>, wide <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">df</span>, <span class="fu">aes</span><span class="op">(</span><span class="va">plate</span>, <span class="va">value</span>, color <span class="op">=</span> <span class="va">adjusted</span>, shape <span class="op">=</span> <span class="va">studyno</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">variable</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: Removed 148 rows containing missing values (geom_point).</span></span></code></pre></div>
+<p><img src="adjustments_files/figure-html/unnamed-chunk-9-3.png" width="100%" style="display: block; margin: auto;"></p>
+<p>We can calculate COV for adjusted and unadjusted values:</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">df_cov</span> <span class="op">&lt;-</span> <span class="va">df</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>COV <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd</a></span><span class="op">(</span><span class="va">value</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">value</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"studyno"</span>, <span class="st">"variable"</span>, <span class="st">"adjusted"</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">df_cov</span>, <span class="fu">aes</span><span class="op">(</span><span class="va">studyno</span>, <span class="va">COV</span>, group <span class="op">=</span> <span class="va">adjusted</span>, color <span class="op">=</span> <span class="va">adjusted</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">variable</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span> <span class="op">+</span> <span class="fu">theme_bw</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span>,axis.text.x <span class="op">=</span> <span class="fu">element_text</span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">90</span>, vjust <span class="op">=</span> <span class="fl">0.5</span>, hjust<span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="adjustments_files/figure-html/unnamed-chunk-10-1.png" width="100%" style="display: block; margin: auto;"></p>
+<p>Or, alternatively, by first finding the mean per plate:</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">df_cov</span> <span class="op">&lt;-</span> <span class="va">df</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>value_mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">value</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"variable"</span>, <span class="st">"plate"</span>, <span class="st">"studyno"</span>, <span class="st">"adjusted"</span><span class="op">)</span><span class="op">]</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>COV <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd</a></span><span class="op">(</span><span class="va">value_mean</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">value_mean</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"studyno"</span>, <span class="st">"variable"</span>, <span class="st">"adjusted"</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">df_cov</span>, <span class="fu">aes</span><span class="op">(</span><span class="va">studyno</span>, <span class="va">COV</span>, group <span class="op">=</span> <span class="va">adjusted</span>, color <span class="op">=</span> <span class="va">adjusted</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">variable</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span> <span class="op">+</span> <span class="fu">theme_bw</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span>,axis.text.x <span class="op">=</span> <span class="fu">element_text</span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">90</span>, vjust <span class="op">=</span> <span class="fl">0.5</span>, hjust<span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="adjustments_files/figure-html/unnamed-chunk-11-1.png" width="100%" style="display: block; margin: auto;"></p>
+</div>
 </div>
 <div class="section level3">
 <h3 id="getting-cytokine-concentrations">Getting cytokine concentrations<a class="anchor" aria-label="anchor" href="#getting-cytokine-concentrations"></a>
 </h3>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># obj$set_batch(batch = c("2"))</span>
-<span class="co"># obj$get_concentrations(ref = "2")</span>
-<span class="co"># obj$plot_standards()</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># obj$set_batch(batch = c("2"))</span></span>
+<span><span class="co"># obj$get_concentrations(ref = "2")</span></span>
+<span><span class="co"># obj$plot_standards()</span></span></code></pre></div>
 </div>
 </div>
   </div>
@@ -243,8 +349,7 @@ pre.plot {
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
